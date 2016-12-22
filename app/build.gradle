@@ -17,7 +17,8 @@ android {
       cmake { 
         arguments '-DANDROID_PLATFORM=android-18',
                   '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=none',
-                  '-DMYY_ANDROID=ON'
+                  '-DMYY_ANDROID=ON', 
+                  "-DANDROID_ASSETS_DIRECTORIES='${sourceSets.main.assets.srcDirs.join(":")}'"
       } 
     }
   }
