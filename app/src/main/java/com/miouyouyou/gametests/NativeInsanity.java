@@ -52,7 +52,7 @@ public class NativeInsanity extends NativeActivity {
 		System.loadLibrary("main");
 	}
 
-	public static native void myyTextInputStopped();
+	public static native void myyTextInputStopped(byte[] data);
 	public static class Log {
 		public static final String LOG_TAG = "Java_native-insanity";
 		public static void print(final String message, Object... args) {
@@ -94,7 +94,10 @@ public class NativeInsanity extends NativeActivity {
 			if (actionId != 0)
 				((LinearLayout) v.getParent()).removeAllViews();
 			Log.print("TextView : %s\n", v.getText().toString());
-			NativeInsanity.myyTextInputStopped();
+			try {
+				NativeInsanity.myyTextInputStopped(v.getText().toString().getBytes("UTF-8"));
+			}
+			catch (Exception e) {}
 
 			NativeInsanity activity =
 				(NativeInsanity) v.getContext();
@@ -193,8 +196,9 @@ public class NativeInsanity extends NativeActivity {
 				}
 
 				invisible_text_edit.setInputType(
-						InputType.TYPE_CLASS_NUMBER
-						| InputType.TYPE_NUMBER_VARIATION_NORMAL);
+					InputType.TYPE_CLASS_TEXT
+					| InputType.TYPE_TEXT_VARIATION_NORMAL
+					| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 				layout.removeAllViews();
 				layout.addView(invisible_text_edit);
 
