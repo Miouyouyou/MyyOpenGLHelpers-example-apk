@@ -9,3 +9,6 @@ build
 local.properties
 app/build
 
+app/src/main/assets/textures
+app/src/main/assets/data
+app/src/main/assets/shaders
