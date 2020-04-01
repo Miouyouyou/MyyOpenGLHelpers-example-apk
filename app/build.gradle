@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "25.0.1"
+  compileSdkVersion 29
+  buildToolsVersion "28.0.3"
 
   defaultConfig {
     applicationId "com.miouyouyou.simpletests"
     minSdkVersion 18
-    targetSdkVersion 25
+    targetSdkVersion 24
     versionCode 1
     versionName "1.0"
     ndk {
@@ -16,11 +16,12 @@ android {
     externalNativeBuild { 
       cmake { 
         arguments '-DANDROID_PLATFORM=android-18',
-                  '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=none',
+                  '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_static',
                   '-DMYY_ANDROID=ON',
                   '-DMYY_X11=OFF',
                   '-DMYY_DRM=OFF',
-                  "-DANDROID_ASSETS_DIRECTORIES='${sourceSets.main.assets.srcDirs.join(":")}'"
+                  "-DANDROID_ASSETS_DIRECTORIES='${sourceSets.main.assets.srcDirs.join(":")}'",
+                  "-DAPP_STL:=stlport_static"
       } 
     }
   }

@@ -46,13 +46,20 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 
+
 public class NativeInsanity extends NativeActivity {
 
 	static {
 		System.loadLibrary("main");
+		try {
+			System.loadLibrary("AGA");
+		}
+		catch (UnsatisfiedLinkError e) {
+			Log.print("Calling the police ! AGA is not loaded !");
+		}
 	}
 
-	public static native void myyTextInputStopped(byte[] data);
+	public static native void myyTextInputStopped(byte[] data, long pointer);
 	public static class Log {
 		public static final String LOG_TAG = "Java_native-insanity";
 		public static void print(final String message, Object... args) {
@@ -77,6 +84,7 @@ public class NativeInsanity extends NativeActivity {
 		}
 	}
 
+	private long myy_states_pointer = 0;
 	/* TODO Try
 	 * - One time TextEdit use. Use SHOW_IMPLICIT and every time
 	 *   the input init function is called, just remove all views from Layout
@@ -85,6 +93,10 @@ public class NativeInsanity extends NativeActivity {
 	 *   provided.
 	 */
 	class OnTextInserted implements TextView.OnEditorActionListener {
+		private long user_state_pointer = 0;
+		public void set_state_pointer(final long pointer) {
+			user_state_pointer = pointer;
+		}
 		public OnTextInserted() {}
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -95,7 +107,9 @@ public class NativeInsanity extends NativeActivity {
 				((LinearLayout) v.getParent()).removeAllViews();
 			Log.print("TextView : %s\n", v.getText().toString());
 			try {
-				NativeInsanity.myyTextInputStopped(v.getText().toString().getBytes("UTF-8"));
+				NativeInsanity.myyTextInputStopped(
+						v.getText().toString().getBytes("UTF-8"),
+						user_state_pointer);
 			}
 			catch (Exception e) {}
 
@@ -111,6 +125,7 @@ public class NativeInsanity extends NativeActivity {
 	private LinearLayout layout;
 	private OnTextInserted cb_text_edit_on_insert;
 	private OnTextChange cb_text_edit_on_change;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -161,6 +176,8 @@ public class NativeInsanity extends NativeActivity {
 	{
 		Log.print("[Java] pointer address : %08x\n", user_pointer);
 		final NativeInsanity insanity = this;
+		this.myy_states_pointer = user_pointer;
+		this.cb_text_edit_on_insert.set_state_pointer(user_pointer);
 
 		runOnUiThread(new Runnable() {
 			@Override

@@ -8,4 +8,6 @@
 build
 local.properties
 app/build
+*.so
+app/.cxx
 

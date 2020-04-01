@@ -9,7 +9,8 @@
       android:icon="@mipmap/ic_launcher"
       android:label="Miouyouyou Simple Tests"
       android:hasCode="true"
-      android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+      android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+      android:debuggable="true">
 
     <!-- Our activity is the built-in NativeActivity framework class.
          This will take care of integrating with our NDK code. -->
@@ -18,7 +19,7 @@
               android:screenOrientation="landscape">
       <!-- Tell NativeActivity the name of or .so -->
       <meta-data android:name="android.app.lib_name"
-	         android:value="fbdirect" />
+	         android:value="main" />
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
